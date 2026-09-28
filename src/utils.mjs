@@ -18,3 +18,41 @@ export function pathExpToMinMaxKeys(pathExp) {
   }
   return [minPath, maxPath]
 }
+
+/**
+ * @param {Array<[string, string]>} pairs
+ * @return {Array<[string, string]>}
+ */
+
+export function sortAndCompactIntervals(pairs) {
+  if (pairs.length === 0) {
+    return []
+  }
+  pairs.sort((pair1, pair2) => {
+    if (pair1[0] > pair2[0]) {
+      return 1
+    } else if (pair1[0] < pair2[0]) {
+      return -1
+    }
+    return 0
+  })
+  let [currentPair, ...rest] = pairs
+  const compactedPairs = []
+  for (const newPair of rest) {
+    if (newPair[0] > currentPair[1]) {
+      // there is an interval between the 2 pairs
+      // they are 2 distinct pairs
+      compactedPairs.push(currentPair)
+      currentPair = newPair
+    } else {
+      // the pairs overlaps: merging into 1
+      currentPair = [
+        currentPair[0],
+        newPair[1] > currentPair[1] ? newPair[1] : currentPair[1],
+      ]
+    }
+  }
+  compactedPairs.push(currentPair)
+
+  return compactedPairs
+}

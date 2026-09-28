@@ -2,7 +2,7 @@
 import assert from "assert"
 import pkg from "zunit"
 
-import { pathExpToMinMaxKeys } from "../src/utils.mjs"
+import { pathExpToMinMaxKeys, sortAndCompactIntervals } from "../src/utils.mjs"
 
 const { describe, it, oit, beforeEach } = pkg
 
@@ -42,6 +42,51 @@ describe("utils", () => {
       ])
       assert.deepEqual(minPath, ["hello", 5, 2])
       assert.deepEqual(maxPath, ["hello", 5, 3])
+    })
+  })
+  describe("sortAndCompactIntervals", () => {
+    it("sorts by ascending min", () => {
+      assert.deepEqual(
+        sortAndCompactIntervals([
+          ["D", "E"],
+          ["A", "B"],
+        ]),
+        [
+          ["A", "B"],
+          ["D", "E"],
+        ],
+      )
+    })
+    it("merges common intervals", () => {
+      assert.deepEqual(
+        sortAndCompactIntervals([
+          ["C", "B"],
+          ["A", "D"],
+        ]),
+        [["A", "D"]],
+      )
+    })
+    it("merges common intervals (2)", () => {
+      assert.deepEqual(
+        sortAndCompactIntervals([
+          ["B", "D"],
+          ["A", "B"],
+        ]),
+        [["A", "D"]],
+      )
+    })
+    it("merges common intervals (3)", () => {
+      assert.deepEqual(
+        sortAndCompactIntervals([
+          ["B", "D"],
+          ["M", "O"],
+          ["A", "B"],
+        ]),
+        [
+          ["A", "D"],
+          ["M", "O"],
+        ],
+      )
     })
   })
 })

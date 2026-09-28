@@ -4,5 +4,3 @@ todo:
 
 - test
 - benchmark
-- return object
-- sort and compact path expressions
